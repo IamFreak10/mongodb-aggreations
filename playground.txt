@@ -45,12 +45,62 @@ db.sales.aggregate([
 
 
 //Group by
+Only items
 db.sales.aggregate([
    {
     $group: {
       _id: "$item",
       totalQuantity: {
         $sum: "$quantity"
+      }
+    }
+   }
+])
+
+
+
+# Group By Multiple Fields
+Here is Multiple Group values
+db.sales.aggregate([
+   {
+    $group: {
+      _id: {
+        StoreName:"$store",
+        category:"$category"
+      },
+      totalQuantity: {
+        $sum: "$quantity"
+      }
+    }
+   }
+])
+
+
+#Find The Total revenue:
+we need to group the entire collection
+db.sales.aggregate([
+   {
+    $group: {
+      _id:null,
+      totalRevenue:{
+        $sum:{
+          $multiply:["$price","$quantity"]
+        }
+      }
+    }
+   }
+])
+
+
+#Add A field called revenue(price* quantity) to each document
+db.sales.aggregate([
+   {
+    $group: {
+      _id:null,
+      totalRevenue:{
+        $sum:{
+          $multiply:["$price","$quantity"]
+        }
       }
     }
    }
